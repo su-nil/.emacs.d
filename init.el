@@ -11,6 +11,12 @@
 (add-to-list 'default-frame-alist '(height . 24))
 (add-to-list 'default-frame-alist '(width . 80))
 
+;; Fancy titlebar for MacOS
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+(setq ns-use-proxy-icon  nil)
+(setq frame-title-format nil)
+
 ;; Package settings
 (require 'package)
 (setq package-archives '(("org"   . "http://orgmode.org/elpa/")
@@ -105,13 +111,6 @@
   ;; Others
   "at"  '(ansi-term :which-key "open terminal")
 ))
-
-;; Fancy titlebar for MacOS
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
-(setq ns-use-proxy-icon  nil)
-(setq frame-title-format nil)
-
 
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
