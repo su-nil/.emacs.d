@@ -2,3 +2,9 @@
 
 /auto-save-list/
 /elpa/
+/smex-items
+/#init.el#
+/eshell/
+/.cache/
+/transient/
+/recentf
