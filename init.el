@@ -1,3 +1,4 @@
+;;; User details
 (setq user-full-name "Sunil KS"
       user-mail-address "kslvsunil@gmail.com")
 
@@ -88,11 +89,19 @@
   :ensure t
   :init
   (setq-default evil-escape-key-sequence "df"
-    evil-escape-unordered-key-sequence "true")
+		evil-escape-unordered-key-sequence "true")
   :config
   (evil-escape-mode 1))
 
- (use-package helm
+(use-package expand-region
+  :ensure t
+  :bind
+  (("C--" . er/contract-region)
+   ("C-=" . er/expand-region))
+  :init
+  (setq-default er/expand-region "C-="))
+
+(use-package helm
   :ensure t
   :defer t
   :diminish helm-mode
@@ -110,7 +119,8 @@
 	helm-move-to-line-cycle-in-source t
 	helm-echo-input-in-header-line t
 	helm-autoresize-max-height 0
-	helm-autoresize-min-height 20)
+	helm-autoresize-min-height 20
+	helm-move-to-line-cycle-in-source t)
   :config
   (helm-mode 1))
 
@@ -135,7 +145,7 @@
   :config
   (which-key-mode 1))
 
-;; Custom keybinding
+;; custom keybindings
 (use-package general
   :ensure t
   :config
@@ -150,6 +160,7 @@
    ;; File
    "f"   '(:ignore t :which-key "files")
    "ff"  '(helm-find-files :which-key "find files")
+   "fw"  '(evil-write :which-key "evil-write")
    "fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
 
    ;; Frame
@@ -175,6 +186,8 @@
    "bb"  '(helm-buffers-list :which-key "helm-buffers-list")
    "bd"  '(kill-this-buffer :which-key "kill-this-buffer")
    "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
+   "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
+   "bq"  '(read-only-mode :which-key "read-only-mode")
 
    ;; Window
    "w"   '(:ignore t :which-key "windows")
@@ -188,12 +201,14 @@
 
    ;; Search
    "s"   '(:ignore t :which-key "search")
-   "ss"  '(helm-swoop :which-key "helm-swoop")
+   "ss"  '(helm-swoop-without-pre-input :which-key "helm-swoop-without-pre-input")
+   "si"  '(helm-swoop :which-key "helm-swoop")
 
    ;; Toggle
    "t"   '(:ignore t :which-key "toggle")
    ;; "tp"  '(parinfer-toggle-mode :which-key "parinfer-toggle-mode")
    "tr"  '(rainbow-delimiters-mode :which-key "rainbow-delimiter-mode")
+
    ;; Quit
    "q"   '(:ignore t :which-key "quit")
    "qq"  '(kill-emacs :which-key "kill-emacs")
@@ -206,9 +221,6 @@
    "z=" '(text-scale-increase :which-key "text-scale-increase")
    "z-" '(text-scale-decrease :which-key "text-scale-decrease")))
 
-;;;; Clojure ;;;;
-
-;; Paredit ;;
 (use-package paredit
   :defer t
   :ensure t
@@ -220,16 +232,12 @@
   (add-hook 'lisp-mode-hook 'paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode))
 
-;; Clojure mode ;;
 (use-package clojure-mode
   :defer t
   :ensure t
-  :mode (("\\.clj\\'" . clojure-mode))
-   ("\\.edn\\'" . clojure-mode)
-  :init
-  ;; (add-hook 'clojure-mode-hook #'yas-minor-mode)
-  ;; (add-hook 'clojure-mode-hook #'subword-mode)
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+  :mode
+  (("\\.clj\\'" . clojure-mode)
+   ("\\.edn\\'" . clojure-mode)))
 
 (use-package cider
   :ensure t
@@ -259,18 +267,16 @@
   (setq avy-background t))
 
 (use-package company
-  :defer t
+  :defer 2
   :ensure t
   :diminish company-mode
-  :config
-  (add-hook 'after-init-hook #'global-company-mode))
+  :hook
+  (after-init . global-company-mode))
 
 (use-package flycheck
   :defer t
   :ensure t
-  :diminish flycheck-mode
-  :config
-  (add-hook 'after-init-hook #'global-flycheck-mode))
+  :diminish flycheck-mode)
 
 (use-package magit
   :defer t)
@@ -315,6 +321,12 @@
     :config
     (global-undo-tree-mode 1))
 
+(use-package golden-ratio
+  :ensure t
+  :defer 2
+  :hook
+  (after-init . golden-ratio-mode))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -325,7 +337,7 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (golden-ratio expand-region doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
