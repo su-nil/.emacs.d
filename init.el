@@ -7,20 +7,19 @@
 ;; Garbage collection threshold and large file warning
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
-(setq inhibit-compacting-font-caches t)
 
-;; minimal UI
+;; UI
+;; toggle off
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-
+;; toggle on
 (display-time-mode 1)
 (global-hl-line-mode +1)
 (column-number-mode t)
 (size-indication-mode t)
-;; (doom-modeline-mode 1)
 
 
 ;; Ease of Life
@@ -32,7 +31,7 @@
 (setq inhibit-startup-screen t)
 
 ;; font
-(add-to-list 'default-frame-alist '(font . "Victor Mono-15"))
+(add-to-list 'default-frame-alist '(font . "Victor Mono-16"))
 
 ;; frame size on start-up
 (add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
@@ -52,7 +51,7 @@
 (setq package-archives '(("org" . "http://orgmode.org/elpa/")
 			 ("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "https://melpa.org/packages/")
-					   ("melpa-stable" . "http://stable.melpa.org/packages/")))
+			 ("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
@@ -60,12 +59,16 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
 (require 'use-package)
-(require 'diminish)
-;; (require 'doom-modeline)
 
 (use-package diminish
   :ensure t)
+
+(use-package use-package-chords
+  :ensure t
+  :config
+  (key-chord-mode 1))
 
 ;; Evil
 (use-package evil
@@ -91,6 +94,7 @@
 ;; Helm
 (use-package helm
   :ensure t
+  :defer 0.1
   :diminish helm-mode
   :init
   (setq helm-M-x-fuzzy-match t
@@ -111,41 +115,87 @@
   (helm-mode 1))
 
 
-
 ;; Which Key
 (use-package which-key
   :ensure t
+  :defer 0.2
   :diminish which-key-mode
   :init
-  (setq which-key-separator " ")
+  (setq which-key-separator " ➜ ")
   (setq which-key-prefix-prefix "+")
+  (setq which-key-add-column-padding 2)
+  (setq which-key-sort-order 'which-key-prefix-then-key-order)
+  (setq which-key-idle-delay 0.01)
   :config
   (which-key-mode 1))
 
 ;; Custom keybinding
 (use-package general
   :ensure t
-  :config (general-define-key
-  :states '(normal visual insert emacs)
-  :prefix "SPC"
-  :non-normal-prefix "M-SPC"
-  ;; "/"   '(counsel-rg :which-key "ripgrep") ; You'll need counsel package for this
-  "TAB" '(switch-to-prev-buffer :which-key "previous buffer")
-  "SPC" '(helm-M-x :which-key "M-x")
-  "ff"  '(helm-find-files :which-key "find files")
-  ;; Buffers
-  "bb"  '(helm-buffers-list :which-key "buffers list")
-  ;; Window
-  "wl"  '(windmove-right :which-key "move right")
-  "wh"  '(windmove-left :which-key "move left")
-  "wk"  '(windmove-up :which-key "move up")
-  "wj"  '(windmove-down :which-key "move bottom")
-  "w/"  '(split-window-right :which-key "split right")
-  "w-"  '(split-window-below :which-key "split bottom")
-  "wd"  '(delete-window :which-key "delete window")
-  ;; Others
-  "at"  '(ansi-term :which-key "open terminal")
-))
+  :config
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "SPC"
+   :non-normal-prefix "M-SPC"
+   "SPC" '(helm-M-x :which-key "M-x")
+   "TAB" '(ace-window :which-key "ace-window")
+   "'"   '(eshell :which-key "terminal")
+
+   ;; File
+   "f"   '(:ignore t :which-key "files")
+   "ff"  '(helm-find-files :which-key "find files")
+   "fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
+
+   ;; Frame
+   "F"    '(:ignore t :which-key "frame")
+   "Ff"   '(make-frame :which-key "make-frame")
+   "Fd"   '(delete-frame :which-key "delete-frame")
+
+   ;; git
+   "g"   '(:ignore t :which-key "git")
+   "gb"  '(magit-checkout :which-key "magit-checkout")
+   "gc"  '(magit-clone :whcih-key "magit-clone")
+   "gs"  '(magit-status :which-key "magit-status")
+   "gi"  '(magit-init :which-key "magit-init")
+   "gS"  '(magit-stage-file :which-key "magit-stage-file")
+   "gU"  '(magit-unstage-file :which-key "magit-unstage-file")
+   "gP"  '(magit-pull :which-key "magit-pull")
+   "gp"  '(magit-push :which-key "magit-push")
+   ;; Buffer
+   "b"   '(:ignore t :which-key "buffers")
+   "bp"  '(previous-buffer :which-key "previous-buffer")
+   "bn"  '(next-buffer :which-key "next-buffer")
+   "bb"  '(helm-buffers-list :which-key "list-buffers")
+   "bd"  '(kill-this-buffer :which-key "kill-this-buffer")
+   "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
+
+   ;; Window
+   "w"   '(:ignore t :which-key "windows")
+   "wl"  '(evil-window-right :which-key "evil-window-right")
+   "wh"  '(evil-window-left :which-key "evil-window-left")
+   "wk"  '(evil-window-up :which-key "evil-window-up")
+   "wj"  '(evil-window-down :which-key "evil-window-down")
+   "w/"  '(split-window-right :which-key "split-window-right")
+   "w-"  '(split-window-below :which-key "split-window-below")
+   "wd"  '(delete-window :which-key "delete-window")
+
+   ;; Search
+   "s"   '(:ignore t :which-key "search")
+
+   ;; Toggle
+   "t"   '(:ignore t :which-key "toggle")
+
+   ;; Quit
+   "q"   '(:ignore t :which-key "quit")
+   "qq"  '(kill-emacs :which-key "kill-emacs")
+
+   ;; projects
+   "p"   '(:ignore t :which-key "projects")
+
+   ;; Zoom
+   "z"  '(:ignore t :which-key "zoom")
+   "z=" '(text-scale-increase :which-key "text-scale-increase")
+   "z-" '(text-scale-decrease :which-key "text-scale-decrease")))
 
 ;;;; Clojure ;;;;
 
@@ -191,7 +241,6 @@
 	 ("\\.edn\\'" . clojure-mode))
   :init
   ;; (add-hook 'clojure-mode-hook #'yas-minor-mode)
-  ;; (add-hook 'clojure-mode-hook #'linum-mode)
   ;; (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
 
@@ -252,14 +301,25 @@
    ("C-c p p" . helm-projectile-switch-project)
    ("C-c p s" . projectile-save-project-buffers))
   :config
-  (projectile-mode +1)
-)
+  (projectile-mode +1))
+
+
 
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode))
 
 (use-package all-the-icons)
+(use-package ace-window
+  :ensure t
+  :defer 0.2)
+
+(use-package undo-tree
+    :ensure t
+    :chords (("uu" . undo-tree-visualize))
+    :diminish undo-tree-mode
+    :config
+    (global-undo-tree-mode 1))
 
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
