@@ -8,7 +8,11 @@
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
 
-;; UI
+;; Disable backup files
+(setq make-backup-files nil) ; stop creating backup~ files
+(setq auto-save-default nil) ; stop creating #autosave# files
+
+;;; UI
 ;; toggle off
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
@@ -21,14 +25,12 @@
 (column-number-mode t)
 (size-indication-mode t)
 
-
-;; Ease of Life
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-auto-revert-mode t)
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+
+;; Remove bell sound
+;; (setq visible-bell t)
+;; (setq ring-bell-function 'ignore)
 
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-16"))
@@ -42,26 +44,33 @@
 (setq ns-use-proxy-icon  nil)
 (setq frame-title-format nil)
 
-;; Prog mode hooks
+
+;;; Ease of Life
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-auto-revert-mode t)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; prog-mode hooks
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-
-;;;; PACKAGE ;;;;
+;;; PACKAGE
 (require 'package)
-(setq package-archives '(("org" . "http://orgmode.org/elpa/")
-			 ("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")))
+(setq package-archives
+      '(("org" . "http://orgmode.org/elpa/")
+	("gnu" . "http://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
-;; Bootstrap `use-package`
+;; bootstrap use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 (require 'use-package)
 
+;; install and config packages
 (use-package diminish
   :ensure t)
 
@@ -70,7 +79,6 @@
   :config
   (key-chord-mode 1))
 
-;; Evil
 (use-package evil
   :ensure t
   :config
@@ -80,21 +88,13 @@
   :ensure t
   :init
   (setq-default evil-escape-key-sequence "df"
-		evil-escape-unordered-key-sequence "true")
+    evil-escape-unordered-key-sequence "true")
   :config
   (evil-escape-mode 1))
 
-;; Theme
- (use-package monokai-theme
+ (use-package helm
   :ensure t
-  :init
-  :config
-  (load-theme 'monokai t))
-
-;; Helm
-(use-package helm
-  :ensure t
-  :defer 0.1
+  :defer t
   :diminish helm-mode
   :init
   (setq helm-M-x-fuzzy-match t
@@ -114,18 +114,24 @@
   :config
   (helm-mode 1))
 
+(use-package helm-swoop
+  :ensure t
+  :defer 2
+  :init
+  (setq helm-swoop-split-with-multiple-windows t
+	helm-swoop-split-direction 'split-window-vertically
+	helm-swoop-speed-or-color t))
 
-;; Which Key
 (use-package which-key
   :ensure t
   :defer 0.2
   :diminish which-key-mode
   :init
-  (setq which-key-separator " ➜ ")
-  (setq which-key-prefix-prefix "+")
-  (setq which-key-add-column-padding 2)
-  (setq which-key-sort-order 'which-key-prefix-then-key-order)
-  (setq which-key-idle-delay 0.01)
+  (setq which-key-separator " ➜ "
+	which-key-prefix-prefix "+"
+	which-key-add-column-padding 2
+	which-key-sort-order 'which-key-prefix-then-key-order
+	which-key-idle-delay 0.01)
   :config
   (which-key-mode 1))
 
@@ -151,9 +157,9 @@
    "Ff"   '(make-frame :which-key "make-frame")
    "Fd"   '(delete-frame :which-key "delete-frame")
 
-   ;; git
+   ;; Git
    "g"   '(:ignore t :which-key "git")
-   "gb"  '(magit-checkout :which-key "magit-checkout")
+   "gb"  '(magit-branch :which-key "magit-branch")
    "gc"  '(magit-clone :whcih-key "magit-clone")
    "gs"  '(magit-status :which-key "magit-status")
    "gi"  '(magit-init :which-key "magit-init")
@@ -161,11 +167,12 @@
    "gU"  '(magit-unstage-file :which-key "magit-unstage-file")
    "gP"  '(magit-pull :which-key "magit-pull")
    "gp"  '(magit-push :which-key "magit-push")
+
    ;; Buffer
    "b"   '(:ignore t :which-key "buffers")
    "bp"  '(previous-buffer :which-key "previous-buffer")
    "bn"  '(next-buffer :which-key "next-buffer")
-   "bb"  '(helm-buffers-list :which-key "list-buffers")
+   "bb"  '(helm-buffers-list :which-key "helm-buffers-list")
    "bd"  '(kill-this-buffer :which-key "kill-this-buffer")
    "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
 
@@ -181,10 +188,12 @@
 
    ;; Search
    "s"   '(:ignore t :which-key "search")
+   "ss"  '(helm-swoop :which-key "helm-swoop")
 
    ;; Toggle
    "t"   '(:ignore t :which-key "toggle")
-
+   ;; "tp"  '(parinfer-toggle-mode :which-key "parinfer-toggle-mode")
+   "tr"  '(rainbow-delimiters-mode :which-key "rainbow-delimiter-mode")
    ;; Quit
    "q"   '(:ignore t :which-key "quit")
    "qq"  '(kill-emacs :which-key "kill-emacs")
@@ -199,33 +208,11 @@
 
 ;;;; Clojure ;;;;
 
-;; Parinfer ;;
-(use-package parinfer
-  :defer t
-  :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-	  '(defaults       ; should be included.
-	    pretty-parens  ; different paren styles for different modes.
-	    evil           ; If you use Evil.
-	    ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-	    paredit        ; Introduce some paredit commands.
-	    smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-	    smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook 'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook 'parinfer-mode)
-    (add-hook 'scheme-mode-hook 'parinfer-mode)
-    (add-hook 'lisp-mode-hook 'parinfer-mode)))
-
 ;; Paredit ;;
 (use-package paredit
   :defer t
   :ensure t
-  :config
+  :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
@@ -237,14 +224,13 @@
 (use-package clojure-mode
   :defer t
   :ensure t
-  :mode (("\\.clj\\'" . clojure-mode)
-	 ("\\.edn\\'" . clojure-mode))
+  :mode (("\\.clj\\'" . clojure-mode))
+   ("\\.edn\\'" . clojure-mode)
   :init
   ;; (add-hook 'clojure-mode-hook #'yas-minor-mode)
   ;; (add-hook 'clojure-mode-hook #'subword-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
 
-;; Cider ;;
 (use-package cider
   :ensure t
   :defer t
@@ -260,17 +246,15 @@
 	cider-overlays-use-font-lock t)
   (cider-repl-toggle-pretty-printing))
 
-;; Rainbow delimiteers ;;
 (use-package rainbow-delimiters
-  :defer t
+  :defer 1
   :ensure t
   :init
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package avy
   :ensure t
-  :bind
-  ("C-s" . avy-goto-char)
+  :defer t
   :config
   (setq avy-background t))
 
@@ -289,30 +273,40 @@
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package magit
-  :defer t
-  :bind (("C-M-g" . magit-status))
-  :init)
+  :defer t)
 
 (use-package projectile
   :ensure t
+  :defer t
   :diminish projectile-mode
-  :bind
-  (("C-c p f" . helm-projectile-find-file)
-   ("C-c p p" . helm-projectile-switch-project)
-   ("C-c p s" . projectile-save-project-buffers))
   :config
-  (projectile-mode +1))
-
-
+  (projectile-mode 1))
 
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode))
 
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+	doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-snazzy t)
+  ;; Enable flashing mode-line on errors
+  ;; (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 (use-package all-the-icons)
+
 (use-package ace-window
   :ensure t
-  :defer 0.2)
+  :defer t)
 
 (use-package undo-tree
     :ensure t
@@ -320,14 +314,6 @@
     :diminish undo-tree-mode
     :config
     (global-undo-tree-mode 1))
-
-;; Disable backup files
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
-
-;; Remove bell sound
-(setq visible-bell t)
-(setq ring-bell-function 'ignore)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -339,10 +325,42 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+
+
+;; (use-package monokai-theme
+ ;;  :ensure t
+ ;;  :init
+ ;;  :config
+ ;;  (load-theme 'monokai t))
+
+;; Parinfer ;;
+;; (use-package parinfer
+;;   :defer t
+;;   :ensure t
+;;   :bind
+;;   (("C-," . parinfer-toggle-mode))
+;;   :init
+;;   (progn
+;;     (setq parinfer-extensions)
+;;     '(defaults       ; should be included.
+;;       pretty-parens  ; different paren styles for different modes.
+;;       evil           ; If you use Evil.
+;;       paredit        ; Introduce some paredit commands.
+;;       smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+;;       smart-yank)   ; Yank behavior depend on mode.
+;;     (add-hook 'clojure-mode-hook 'parinfer-mode)
+;;     (add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
+;;     (add-hook 'common-lisp-mode-hook 'parinfer-mode)
+;;     (add-hook 'scheme-mode-hook 'parinfer-mode)
+;;     (add-hook 'lisp-mode-hook 'parinfer-mode)))
