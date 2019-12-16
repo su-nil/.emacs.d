@@ -1,6 +1,6 @@
 ;;; User details
-(setq user-full-name "Sunil KS"
-      user-mail-address "kslvsunil@gmail.com")
+;; (setq user-full-name "Sunil KS"
+;;       user-mail-address "kslvsunil@gmail.com")
 
 (require 'server)
 (if (not (server-running-p)) (server-start))
