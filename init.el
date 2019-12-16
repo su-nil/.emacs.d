@@ -12,7 +12,7 @@
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
-
+(add-to-list 'exec-path "/usr/local/bin")
 ;;; UI
 ;; toggle off
 (scroll-bar-mode -1)
@@ -28,10 +28,6 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
-
-;; Remove bell sound
-;; (setq visible-bell t)
-;; (setq ring-bell-function 'ignore)
 
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-16"))
@@ -227,6 +223,7 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode 'paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
   (add-hook 'ielm-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode)
@@ -298,9 +295,7 @@
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-snazzy t)
-  ;; Enable flashing mode-line on errors
   ;; (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
@@ -315,17 +310,21 @@
   :defer t)
 
 (use-package undo-tree
-    :ensure t
-    :chords (("uu" . undo-tree-visualize))
+  :ensure t
+  :chords (("uu" . undo-tree-visualize))
     :diminish undo-tree-mode
     :config
     (global-undo-tree-mode 1))
 
 (use-package golden-ratio
   :ensure t
-  :defer 2
-  :hook
-  (after-init . golden-ratio-mode))
+  :defer t)
+
+(use-package org
+  :ensure t
+  :defer t
+  :mode
+  ("\\.org" . org-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
