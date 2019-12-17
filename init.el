@@ -1,6 +1,6 @@
 ;;; User details
-;; (setq user-full-name "Sunil KS"
-;;       user-mail-address "kslvsunil@gmail.com")
+(setq user-full-name "Sunil KS"
+      user-mail-address "kslvsunil@gmail.com")
 
 (require 'server)
 (if (not (server-running-p)) (server-start))
@@ -13,13 +13,17 @@
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
 (add-to-list 'exec-path "/usr/local/bin")
+
 ;;; UI
+
 ;; toggle off
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
+(show-paren-mode 1)
+
 ;; toggle on
 (display-time-mode 1)
 (global-hl-line-mode +1)
@@ -28,6 +32,15 @@
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
+;; (add-hook 'after-init-hook 'org-agenda-list)
+(setq initial-buffer-choice
+      (lambda ()
+	(org-agenda-list 1)
+	(delete-other-windows)
+	(get-buffer "*Org Agenda*")))
+;; disable emacs error sounds instead enable visible bell
+(setq ring-bell-function 'ignore)
+(setq visible-bell t)
 
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-16"))
@@ -41,14 +54,19 @@
 (setq ns-use-proxy-icon  nil)
 (setq frame-title-format nil)
 
-
-;;; Ease of Life
+;; unset keys
+(global-unset-key (kbd "q"))
+(global-set-key (kbd "C-;") 'comment-line)
+;; make things easy
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; prog-mode hooks
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+;; org settings
+(setq org-agenda-files '("~/Documents/org/"))
 
 ;;; PACKAGE
 (require 'package)
@@ -93,9 +111,7 @@
   :ensure t
   :bind
   (("C--" . er/contract-region)
-   ("C-=" . er/expand-region))
-  :init
-  (setq-default er/expand-region "C-="))
+   ("C-=" . er/expand-region)))
 
 (use-package helm
   :ensure t
@@ -212,6 +228,9 @@
    ;; projects
    "p"   '(:ignore t :which-key "projects")
 
+   ;; org mode
+   "o"  '(:ignore t :which-key "org")
+
    ;; Zoom
    "z"  '(:ignore t :which-key "zoom")
    "z=" '(text-scale-increase :which-key "text-scale-increase")
@@ -229,12 +248,22 @@
   (add-hook 'lisp-mode-hook 'paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode))
 
+(use-package flycheck
+  :defer t
+  :ensure t
+  :diminish flycheck-mode)
+
+(use-package flycheck-clj-kondo
+  :ensure t)
+
 (use-package clojure-mode
   :defer t
   :ensure t
   :mode
   (("\\.clj\\'" . clojure-mode)
-   ("\\.edn\\'" . clojure-mode)))
+   ("\\.edn\\'" . clojure-mode))
+  :config
+  (require 'flycheck-clj-kondo))
 
 (use-package cider
   :ensure t
@@ -251,9 +280,18 @@
 	cider-overlays-use-font-lock t)
   (cider-repl-toggle-pretty-printing))
 
-(use-package rainbow-delimiters
-  :defer 1
+
+(use-package aggressive-indent
   :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode))
+;;     (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+;; )
+
+
+(use-package rainbow-delimiters
+  :ensure t
+  :defer 2
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
@@ -269,11 +307,6 @@
   :diminish company-mode
   :hook
   (after-init . global-company-mode))
-
-(use-package flycheck
-  :defer t
-  :ensure t
-  :diminish flycheck-mode)
 
 (use-package magit
   :defer t)
@@ -309,12 +342,12 @@
   :ensure t
   :defer t)
 
-(use-package undo-tree
-  :ensure t
-  :chords (("uu" . undo-tree-visualize))
-    :diminish undo-tree-mode
-    :config
-    (global-undo-tree-mode 1))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :chords (("uu" . undo-tree-visualize))
+;;   :diminish undo-tree-mode
+;;   :config
+;;   (global-undo-tree-mode 1))
 
 (use-package golden-ratio
   :ensure t
@@ -336,7 +369,7 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (golden-ratio expand-region doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
