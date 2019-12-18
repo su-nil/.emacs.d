@@ -42,6 +42,8 @@
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
+
+
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-13"))
 
@@ -66,7 +68,7 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 ;; org settings
-(setq org-agenda-files '("~/Documents/org/"))
+;; (setq org-agenda-files '("~/Documents/org/"))
 
 ;;; PACKAGE
 (require 'package)
@@ -305,6 +307,7 @@
   (after-init . global-company-mode))
 
 (use-package magit
+  :ensure t
   :defer t)
 
 (use-package projectile
@@ -314,11 +317,15 @@
   :config
   (projectile-mode 1))
 
+(use-package all-the-icons
+  :ensure t)
+
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode))
 
 (use-package doom-themes
+  :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -332,7 +339,7 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(use-package all-the-icons)
+
 
 (use-package ace-window
   :ensure t
@@ -365,24 +372,24 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+;; custom-set-faces was added by Custom.
+;; If you edit it by hand, you could mess it up, so be careful.
+;; Your init file should contain only one such instance.
+;; If there is more than one, they won't work right.
 
 
 ;; (use-package monokai-theme
- ;;  :ensure t
- ;;  :init
- ;;  :config
- ;;  (load-theme 'monokai t))
+;;  :ensure t
+;;  :init
+;;  :config
+;;  (load-theme 'monokai t))
 
 ;; Parinfer ;;
 ;; (use-package parinfer
