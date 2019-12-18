@@ -43,7 +43,7 @@
 (setq visible-bell t)
 
 ;; font
-(add-to-list 'default-frame-alist '(font . "Victor Mono-16"))
+(add-to-list 'default-frame-alist '(font . "Victor Mono-13"))
 
 ;; frame size on start-up
 (add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
@@ -280,14 +280,10 @@
 	cider-overlays-use-font-lock t)
   (cider-repl-toggle-pretty-printing))
 
-
 (use-package aggressive-indent
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'aggressive-indent-mode))
-;;     (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-;; )
-
 
 (use-package rainbow-delimiters
   :ensure t
@@ -369,7 +365,7 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop magit general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
