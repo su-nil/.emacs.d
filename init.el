@@ -38,12 +38,13 @@
 	(org-agenda-list 1)
 	(delete-other-windows)
 	(get-buffer "*Org Agenda*")))
+
 ;; disable emacs error sounds instead enable visible bell
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
-
-
+;; Highlight the whole expression when cursor is on the bracket
+(setq show-paren-style 'expression)
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-13"))
 
@@ -74,9 +75,9 @@
 (require 'package)
 (setq package-archives
       '(("org" . "http://orgmode.org/elpa/")
-	("gnu" . "http://elpa.gnu.org/packages/")
-	("melpa" . "https://melpa.org/packages/")
-	("melpa-stable" . "http://stable.melpa.org/packages/")))
+	      ("gnu" . "http://elpa.gnu.org/packages/")
+	      ("melpa" . "https://melpa.org/packages/")
+	      ("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
@@ -146,6 +147,10 @@
 	helm-swoop-split-direction 'split-window-vertically
 	helm-swoop-speed-or-color t))
 
+(use-package helm-projectile
+  :ensure t
+  :defer 2)
+
 (use-package which-key
   :ensure t
   :defer 0.2
@@ -212,6 +217,7 @@
    "w/"  '(split-window-right :which-key "split-window-right")
    "w-"  '(split-window-below :which-key "split-window-below")
    "wd"  '(delete-window :which-key "delete-window")
+   "wo"  '(delete-other-windows :which-key "delete-other-windows")
 
    ;; Search
    "s"   '(:ignore t :which-key "search")
@@ -229,6 +235,10 @@
 
    ;; projects
    "p"   '(:ignore t :which-key "projects")
+   "pf"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
+   "pp"  '(helm-projectile :which-key "helm-projectile")
+   "ps"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
+   "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
 
    ;; org mode
    "o"  '(:ignore t :which-key "org")
@@ -257,6 +267,11 @@
 
 (use-package flycheck-clj-kondo
   :ensure t)
+
+(use-package clj-refactor
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'clj-refactor-mode))
 
 (use-package clojure-mode
   :defer t
@@ -339,8 +354,6 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-
-
 (use-package ace-window
   :ensure t
   :defer t)
@@ -372,7 +385,7 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
