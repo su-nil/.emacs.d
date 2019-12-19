@@ -199,8 +199,10 @@
    "gi"  '(magit-init :which-key "magit-init")
    "gS"  '(magit-stage-file :which-key "magit-stage-file")
    "gU"  '(magit-unstage-file :which-key "magit-unstage-file")
-   "gP"  '(magit-pull :which-key "magit-pull")
-   "gp"  '(magit-push :which-key "magit-push")
+   "gp"  '(magit-pull :which-key "magit-pull")
+   "gP"  '(magit-push :which-key "magit-push")
+   "gt"  '(magit-stash :which-key "magit-stash")
+   "gm"  '(magit-merge :which-key "magit-merge")
 
    ;; Buffer
    "b"   '(:ignore t :which-key "buffers")
@@ -211,13 +213,12 @@
    "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
    "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
    "bq"  '(read-only-mode :which-key "read-only-mode")
-
+   "bs"  '(save-buffer :which-key "save-buffer")
 
    "j"   '(:ignore t :which-key "dumb-jump")
    "jg"  '(dumb-jump-go :which-key "dumb-jump-go")
    "jb"  '(dumb-jump-back :which-key "dumb-jump-back")
    "jo"  '(dumb-jump-go-other-window :which-key "dumb-jump-go-other-window")
-   "jp"  '(dumb-jump-go-prompt :which-key "dumb-jump-go-prompt")
 
    ;; Window
    "w"   '(:ignore t :which-key "windows")
@@ -242,14 +243,15 @@
 
    ;; Quit
    "q"   '(:ignore t :which-key "quit")
-   "qq"  '(kill-emacs :which-key "kill-emacs")
+   "qk"  '(kill-emacs :which-key "kill-emacs")
 
    ;; projects
    "p"   '(:ignore t :which-key "projects")
    "pf"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
    "pp"  '(helm-projectile :which-key "helm-projectile")
-   "ps"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
+   "po"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
    "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
+   "pg"  '(helm-projectile-grep :which-key "helm-projectile-grep")
 
    ;; org mode
    "o"  '(:ignore t :which-key "org")
@@ -341,7 +343,9 @@
   :defer t
   :diminish projectile-mode
   :config
-  (projectile-mode 1))
+  (projectile-mode 1)
+  (setq projectile-use-git-grep 1)
+  (setq projectile-switch-project-action 'helm-projectile-find-file))
 
 (use-package all-the-icons
   :ensure t)
@@ -373,7 +377,9 @@
   :ensure t
   :defer 5
   :init
-  (dumb-jump-mode 1))
+  (dumb-jump-mode 1)
+  :config
+  (setq dumb-jump-selector 'helm))
 
 (use-package golden-ratio
   :ensure t
