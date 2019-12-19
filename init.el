@@ -139,6 +139,9 @@
   :config
   (helm-mode 1))
 
+(use-package helm-ag
+  :ensure t)
+
 (use-package helm-swoop
   :ensure t
   :defer 2
@@ -181,6 +184,7 @@
    "ff"  '(helm-find-files :which-key "find files")
    "fw"  '(evil-write :which-key "evil-write")
    "fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
+   "fo"  '(find-file-other-window :which-key "find-file-other-window")
 
    ;; Frame
    "F"    '(:ignore t :which-key "frame")
@@ -207,6 +211,13 @@
    "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
    "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
    "bq"  '(read-only-mode :which-key "read-only-mode")
+
+
+   "j"   '(:ignore t :which-key "dumb-jump")
+   "jg"  '(dumb-jump-go :which-key "dumb-jump-go")
+   "jb"  '(dumb-jump-back :which-key "dumb-jump-back")
+   "jo"  '(dumb-jump-go-other-window :which-key "dumb-jump-go-other-window")
+   "jp"  '(dumb-jump-go-prompt :which-key "dumb-jump-go-prompt")
 
    ;; Window
    "w"   '(:ignore t :which-key "windows")
@@ -358,12 +369,11 @@
   :ensure t
   :defer t)
 
-;; (use-package undo-tree
-;;   :ensure t
-;;   :chords (("uu" . undo-tree-visualize))
-;;   :diminish undo-tree-mode
-;;   :config
-;;   (global-undo-tree-mode 1))
+(use-package dumb-jump
+  :ensure t
+  :defer 5
+  :init
+  (dumb-jump-mode 1))
 
 (use-package golden-ratio
   :ensure t
@@ -375,6 +385,14 @@
   :mode
   ("\\.org" . org-mode))
 
+;; (use-package undo-tree
+;;   :ensure t
+;;   :chords (("uu" . undo-tree-visualize))
+;;   :diminish undo-tree-mode
+;;   :config
+;;   (global-undo-tree-mode 1))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -385,7 +403,7 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(package-selected-packages
    (quote
-    (helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
