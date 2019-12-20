@@ -216,8 +216,8 @@
    "bs"  '(save-buffer :which-key "save-buffer")
 
    "j"   '(:ignore t :which-key "dumb-jump")
-   "jg"  '(dumb-jump-go :which-key "dumb-jump-go")
-   "jb"  '(dumb-jump-back :which-key "dumb-jump-back")
+   "jj"  '(dumb-jump-go :which-key "dumb-jump-go")
+   "jp"  '(dumb-jump-back :which-key "dumb-jump-back")
    "jo"  '(dumb-jump-go-other-window :which-key "dumb-jump-go-other-window")
 
    ;; Window
@@ -321,11 +321,11 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package avy
+(use-package move-text
   :ensure t
-  :defer t
+  :defer 5
   :config
-  (setq avy-background t))
+  (move-text-default-bindings))
 
 (use-package company
   :defer 2
@@ -383,21 +383,18 @@
 
 (use-package golden-ratio
   :ensure t
-  :defer t)
+  :defer t
+  :init
+  (golden-ratio-mode 1)
+  :config
+  (add-to-list 'golden-ratio-extra-commands 'ace-window)
+  (setq golden-ratio-recenter t))
 
 (use-package org
   :ensure t
   :defer t
   :mode
   ("\\.org" . org-mode))
-
-;; (use-package undo-tree
-;;   :ensure t
-;;   :chords (("uu" . undo-tree-visualize))
-;;   :diminish undo-tree-mode
-;;   :config
-;;   (global-undo-tree-mode 1))
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -407,9 +404,10 @@
  '(custom-safe-themes
    (quote
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+ '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -448,3 +446,11 @@
 ;;     (add-hook 'common-lisp-mode-hook 'parinfer-mode)
 ;;     (add-hook 'scheme-mode-hook 'parinfer-mode)
 ;;     (add-hook 'lisp-mode-hook 'parinfer-mode)))
+
+
+;;  (use-package undo-tree
+;;   :ensure t
+;;   :chords (("uu" . undo-tree-visualize))
+;;   :diminish undo-tree-mode
+;;   :config
+;;   (global-undo-tree-mode 1))
