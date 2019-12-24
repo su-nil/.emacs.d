@@ -58,7 +58,7 @@
 (setq frame-title-format nil)
 
 ;; unset keys
-(global-unset-key (kbd "q"))
+;; (global-unset-key (kbd "q"))
 (global-set-key (kbd "C-;") 'comment-line)
 ;; make things easy
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -179,6 +179,21 @@
    "TAB" '(ace-window :which-key "ace-window")
    "'"   '(eshell :which-key "terminal")
 
+   ;; Buffer
+   "b"   '(:ignore t :which-key "buffers")
+   "bp"  '(previous-buffer :which-key "previous-buffer")
+   "bn"  '(next-buffer :which-key "next-buffer")
+   "bb"  '(helm-buffers-list :which-key "helm-buffers-list")
+   "bd"  '(kill-this-buffer :which-key "kill-this-buffer")
+   "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
+   "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
+   "bq"  '(read-only-mode :which-key "read-only-mode")
+   "bs"  '(save-buffer :which-key "save-buffer")
+
+   "d" '(:ignore t :which-key "treemacs")
+   "dd" '(treemacs :which-key "treemacs")
+
+
    ;; File
    "f"   '(:ignore t :which-key "files")
    "ff"  '(helm-find-files :which-key "find files")
@@ -204,21 +219,35 @@
    "gt"  '(magit-stash :which-key "magit-stash")
    "gm"  '(magit-merge :which-key "magit-merge")
 
-   ;; Buffer
-   "b"   '(:ignore t :which-key "buffers")
-   "bp"  '(previous-buffer :which-key "previous-buffer")
-   "bn"  '(next-buffer :which-key "next-buffer")
-   "bb"  '(helm-buffers-list :which-key "helm-buffers-list")
-   "bd"  '(kill-this-buffer :which-key "kill-this-buffer")
-   "bx"  '(kill-buffer-and-window :which-key "kill-buffer-and-window")
-   "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
-   "bq"  '(read-only-mode :which-key "read-only-mode")
-   "bs"  '(save-buffer :which-key "save-buffer")
-
+   ;; Jump to definition
    "j"   '(:ignore t :which-key "dumb-jump")
    "jj"  '(dumb-jump-go :which-key "dumb-jump-go")
    "jp"  '(dumb-jump-back :which-key "dumb-jump-back")
    "jo"  '(dumb-jump-go-other-window :which-key "dumb-jump-go-other-window")
+
+   ;; Quit
+   "k"   '(:ignore t :which-key "quit")
+   "kk"  '(kill-emacs :which-key "kill-emacs")
+
+   ;; org mode
+   "o"  '(:ignore t :which-key "org")
+
+   ;; projects
+   "p"   '(:ignore t :which-key "projects")
+   "pf"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
+   "pp"  '(helm-projectile :which-key "helm-projectile")
+   "ps"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
+   "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
+   "pg"  '(helm-projectile-grep :which-key "helm-projectile-grep")
+
+   ;; Search
+   "s"   '(:ignore t :which-key "search")
+   "ss"  '(helm-swoop-without-pre-input :which-key "helm-swoop-without-pre-input")
+   "si"  '(helm-swoop :which-key "helm-swoop")
+
+   ;; Toggle
+   "t"   '(:ignore t :which-key "toggle")
+   "tr"  '(rainbow-delimiters-mode :which-key "rainbow-delimiter-mode")
 
    ;; Window
    "w"   '(:ignore t :which-key "windows")
@@ -230,31 +259,6 @@
    "w-"  '(split-window-below :which-key "split-window-below")
    "wd"  '(delete-window :which-key "delete-window")
    "wo"  '(delete-other-windows :which-key "delete-other-windows")
-
-   ;; Search
-   "s"   '(:ignore t :which-key "search")
-   "ss"  '(helm-swoop-without-pre-input :which-key "helm-swoop-without-pre-input")
-   "si"  '(helm-swoop :which-key "helm-swoop")
-
-   ;; Toggle
-   "t"   '(:ignore t :which-key "toggle")
-   ;; "tp"  '(parinfer-toggle-mode :which-key "parinfer-toggle-mode")
-   "tr"  '(rainbow-delimiters-mode :which-key "rainbow-delimiter-mode")
-
-   ;; Quit
-   "q"   '(:ignore t :which-key "quit")
-   "qk"  '(kill-emacs :which-key "kill-emacs")
-
-   ;; projects
-   "p"   '(:ignore t :which-key "projects")
-   "pf"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
-   "pp"  '(helm-projectile :which-key "helm-projectile")
-   "po"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
-   "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
-   "pg"  '(helm-projectile-grep :which-key "helm-projectile-grep")
-
-   ;; org mode
-   "o"  '(:ignore t :which-key "org")
 
    ;; Zoom
    "z"  '(:ignore t :which-key "zoom")
@@ -320,12 +324,6 @@
   :defer 2
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-(use-package move-text
-  :ensure t
-  :defer 5
-  :config
-  (move-text-default-bindings))
 
 (use-package company
   :defer 2
@@ -396,6 +394,25 @@
   :mode
   ("\\.org" . org-mode))
 
+(use-package yaml-mode
+  :defer t
+  :ensure t
+  :mode
+  (("\\.yml\\'" . yaml-mode)))
+
+(use-package treemacs
+  :defer t
+  :ensure t)
+
+(use-package treemacs-evil
+  :defer t
+  :ensure t)
+
+(use-package treemacs-projectile
+  :defer t
+  :ensure t)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -407,7 +424,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -454,3 +471,9 @@
 ;;   :diminish undo-tree-mode
 ;;   :config
 ;;   (global-undo-tree-mode 1))
+
+;; (use-package move-text
+;;   :ensure t
+;;   :defer 5
+;;   :config
+;;   (move-text-default-bindings))
