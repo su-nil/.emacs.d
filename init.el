@@ -152,7 +152,7 @@
 
 (use-package helm-projectile
   :ensure t
-  :defer 2)
+  :defer 0.2)
 
 (use-package which-key
   :ensure t
