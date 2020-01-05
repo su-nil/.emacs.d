@@ -1,4 +1,4 @@
-;;; User details
+ ;;; User details
 (setq user-full-name "Sunil KS"
       user-mail-address "kslvsunil@gmail.com")
 
@@ -58,9 +58,6 @@
 (setq ns-use-proxy-icon  nil)
 (setq frame-title-format nil)
 
-;; unset keys
-;; (global-set-key (kbd "C-;") 'comment-line)
-
 ;; make things easy
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
@@ -89,6 +86,24 @@
 
 (require 'use-package)
 
+(defvar my-lisp-mode-hooks
+  '(clojure-mode-hook
+    emacs-lisp-mode-hook
+    ielm-mode-hook
+    lisp-mode-hook
+    lisp-interaction-mode-hook
+    eval-expression-minibuffer-setup-hook
+    cider-repl-mode-hook))
+
+(defvar my-lisp-mode-maps
+  '(clojure-mode-map
+    emacs-lisp-mode-map
+    ielm-mode-map
+    lisp-mode-map
+    lisp-interaction-mode-map
+    eval-expression-minibuffer-setup-map
+    cider-repl-mode-map))
+
 ;; install and config packages
 (use-package diminish
   :ensure t)
@@ -111,16 +126,8 @@
   :config
   (evil-escape-mode 1))
 
-(use-package evil-commentary
-  :ensure t
-  :config
-  (evil-commentary-mode 1))
-
 (use-package expand-region
-  :ensure t
-  :bind
-  (("C--" . er/contract-region)
-   ("C-=" . er/expand-region)))
+  :ensure t)
 
 (use-package helm
   :ensure t
@@ -173,10 +180,157 @@
   :config
   (which-key-mode 1))
 
+(use-package paredit
+  :defer t
+  :ensure t
+  :init
+  (general-add-hook my-lisp-mode-hooks #'paredit-mode))
+
+(use-package lispyville
+  :init
+  (general-add-hook my-lisp-mode-hooks #'lispyville-mode)
+  :config
+  (lispyville-set-key-theme '(operators c-w additional)))
+
+(use-package flycheck
+  :defer t
+  :ensure t
+  :diminish flycheck-mode)
+
+(use-package flycheck-clj-kondo
+  :ensure t)
+
+(use-package clj-refactor
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'clj-refactor-mode))
+
+(use-package clojure-mode
+  :defer t
+  :ensure t
+  :mode
+  (("\\.clj\\'" . clojure-mode)
+   ("\\.edn\\'" . clojure-mode))
+  :config
+  (require 'flycheck-clj-kondo))
+
+(use-package cider
+  :ensure t
+  :defer t
+  :init (add-hook 'cider-mode-hook #'clj-refactor-mode)
+  :diminish subword-mode
+  :config
+  (setq nrepl-log-messages t
+	cider-repl-display-in-current-window t
+	cider-repl-use-clojure-font-lock t
+	cider-prompt-save-file-on-load 'always-save
+	cider-font-lock-dynamically '(macro core function var)
+	nrepl-hide-special-buffers t
+	cider-overlays-use-font-lock t)
+  (cider-repl-toggle-pretty-printing))
+
+(use-package aggressive-indent
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'aggressive-indent-mode))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :defer 2
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package company
+  :defer 2
+  :ensure t
+  :diminish company-mode
+  :hook
+  (after-init . global-company-mode))
+
+(use-package magit
+  :ensure t
+  :defer t)
+
+(use-package projectile
+  :ensure t
+  :defer t
+  :diminish projectile-mode
+  :config
+  (projectile-mode 1)
+  (setq projectile-use-git-grep 1)
+  (setq projectile-switch-project-action 'helm-projectile-find-file))
+
+(use-package all-the-icons
+  :ensure t)
+
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (load-theme 'doom-snazzy t)
+  (doom-themes-neotree-config)
+  (setq doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
+
+(use-package ace-window
+  :ensure t
+  :defer t)
+
+(use-package dumb-jump
+  :ensure t
+  :defer 5
+  :init
+  (dumb-jump-mode 1)
+  :config
+  (setq dumb-jump-selector 'helm))
+
+(use-package golden-ratio
+  :ensure t
+  :defer t
+  :init
+  (golden-ratio-mode 1)
+  :config
+  (add-to-list 'golden-ratio-extra-commands 'ace-window)
+  (setq golden-ratio-recenter t))
+
+(use-package org
+  :ensure t
+  :defer t
+  :mode
+  ("\\.org" . org-mode))
+
+(use-package yaml-mode
+  :defer t
+  :ensure t
+  :mode
+  (("\\.yml\\'" . yaml-mode)))
+
+(use-package treemacs
+  :defer t
+  :ensure t)
+
+(use-package treemacs-evil
+  :defer t
+  :ensure t)
+
+(use-package treemacs-projectile
+  :defer t
+  :ensure t)
+
 ;; custom keybindings
 (use-package general
   :ensure t
   :config
+  (general-define-key
+   :states '(normal visual insert emacs)
+   "s-/"  'comment-line)
+
   (general-define-key
    :states '(normal visual insert emacs)
    :prefix "SPC"
@@ -268,159 +422,19 @@
    "wo"  '(delete-other-windows :which-key "delete-other-windows")
 
    ;; zoom
-   "z"  '(:ignore t :which-key "zoom")
-   "z=" '(text-scale-increase :which-key "text-scale-increase")
-   "z-" '(text-scale-decrease :which-key "text-scale-decrease")))
+   "z"   '(:ignore t :which-key "zoom")
+   "z="  '(text-scale-increase :which-key "text-scale-increase")
+   "z-"  '(text-scale-decrease :which-key "text-scale-decrease"))
 
-(use-package paredit
-  :defer t
-  :ensure t
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode 'paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
-  (add-hook 'ielm-mode-hook 'paredit-mode)
-  (add-hook 'lisp-mode-hook 'paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode))
-
-(use-package lispyville
-  :init
-  (general-add-hook '(emacs-lisp-mode-hook clojure-mode-hook lisp-mode-hook) #'lispyville-mode)
-  :config
-  (lispyville-set-key-theme '(operators c-w additional)))
-
-(use-package flycheck
-  :defer t
-  :ensure t
-  :diminish flycheck-mode)
-
-(use-package flycheck-clj-kondo
-  :ensure t)
-
-(use-package clj-refactor
-  :ensure t
-  :config
-  (add-hook 'clojure-mode-hook #'clj-refactor-mode))
-
-(use-package clojure-mode
-  :defer t
-  :ensure t
-  :mode
-  (("\\.clj\\'" . clojure-mode)
-   ("\\.edn\\'" . clojure-mode))
-  :config
-  (require 'flycheck-clj-kondo))
-
-(use-package cider
-  :ensure t
-  :defer t
-  :init (add-hook 'cider-mode-hook #'clj-refactor-mode)
-  :diminish subword-mode
-  :config
-  (setq nrepl-log-messages t
-	cider-repl-display-in-current-window t
-	cider-repl-use-clojure-font-lock t
-	cider-prompt-save-file-on-load 'always-save
-	cider-font-lock-dynamically '(macro core function var)
-	nrepl-hide-special-buffers t
-	cider-overlays-use-font-lock t)
-  (cider-repl-toggle-pretty-printing))
-
-(use-package aggressive-indent
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'aggressive-indent-mode))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :defer 2
-  :init
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-(use-package company
-  :defer 2
-  :ensure t
-  :diminish company-mode
-  :hook
-  (after-init . global-company-mode))
-
-(use-package magit
-  :ensure t
-  :defer t)
-
-(use-package projectile
-  :ensure t
-  :defer t
-  :diminish projectile-mode
-  :config
-  (projectile-mode 1)
-  (setq projectile-use-git-grep 1)
-  (setq projectile-switch-project-action 'helm-projectile-find-file))
-
-(use-package all-the-icons
-  :ensure t)
-
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-snazzy t)
-  (doom-themes-neotree-config)
-  (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config)
-  (doom-themes-org-config))
-
-(use-package ace-window
-  :ensure t
-  :defer t)
-
-(use-package dumb-jump
-  :ensure t
-  :defer 5
-  :init
-  (dumb-jump-mode 1)
-  :config
-  (setq dumb-jump-selector 'helm))
-
-(use-package golden-ratio
-  :ensure t
-  :defer t
-  :init
-  (golden-ratio-mode 1)
-  :config
-  (add-to-list 'golden-ratio-extra-commands 'ace-window)
-  (setq golden-ratio-recenter t))
-
-(use-package org
-  :ensure t
-  :defer t
-  :mode
-  ("\\.org" . org-mode))
-
-(use-package yaml-mode
-  :defer t
-  :ensure t
-  :mode
-  (("\\.yml\\'" . yaml-mode)))
-
-(use-package treemacs
-  :defer t
-  :ensure t)
-
-(use-package treemacs-evil
-  :defer t
-  :ensure t)
-
-(use-package treemacs-projectile
-  :defer t
-  :ensure t)
-
+  ;; lisp specific
+  (general-define-key
+   :states '(normal visual)
+   :keymaps my-lisp-mode-maps
+   "gc"         'lispyville-comment-or-uncomment
+   "S-M-<up>"   'lispy-move-up
+   "S-M-<down>" 'lispy-move-down
+   "C--"        'er/contract-region
+   "C-="        'er/expand-region))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -444,39 +458,3 @@
 ;; If you edit it by hand, you could mess it up, so be careful.
 ;; Your init file should contain only one such instance.
 ;; If there is more than one, they won't work right.
-
-
-;; Parinfer ;;
-;; (use-package parinfer
-;;   :defer t
-;;   :ensure t
-;;   :bind
-;;   (("C-," . parinfer-toggle-mode))
-;;   :init
-;;   (progn
-;;     (setq parinfer-extensions)
-;;     '(defaults       ; should be included.
-;;       pretty-parens  ; different paren styles for different modes.
-;;       evil           ; If you use Evil.
-;;       paredit        ; Introduce some paredit commands.
-;;       smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-;;       smart-yank)   ; Yank behavior depend on mode.
-;;     (add-hook 'clojure-mode-hook 'parinfer-mode)
-;;     (add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
-;;     (add-hook 'common-lisp-mode-hook 'parinfer-mode)
-;;     (add-hook 'scheme-mode-hook 'parinfer-mode)
-;;     (add-hook 'lisp-mode-hook 'parinfer-mode)))
-
-
-;;  (use-package undo-tree
-;;   :ensure t
-;;   :chords (("uu" . undo-tree-visualize))
-;;   :diminish undo-tree-mode
-;;   :config
-;;   (global-undo-tree-mode 1))
-
-;; (use-package move-text
-;;   :ensure t
-;;   :defer 5
-;;   :config
-;;   (move-text-default-bindings))
