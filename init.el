@@ -59,7 +59,7 @@
 (setq frame-title-format nil)
 
 ;; unset keys
-(global-set-key (kbd "C-;") 'comment-line)
+;; (global-set-key (kbd "C-;") 'comment-line)
 
 ;; make things easy
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -76,9 +76,9 @@
 (require 'package)
 (setq package-archives
       '(("org" . "http://orgmode.org/elpa/")
-	      ("gnu" . "http://elpa.gnu.org/packages/")
-	      ("melpa" . "https://melpa.org/packages/")
-	      ("melpa-stable" . "http://stable.melpa.org/packages/")))
+	("gnu" . "http://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 (setq package-enable-at-startup nil)
 
@@ -110,6 +110,11 @@
 		evil-escape-unordered-key-sequence "true")
   :config
   (evil-escape-mode 1))
+
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode 1))
 
 (use-package expand-region
   :ensure t
@@ -195,7 +200,6 @@
    "d" '(:ignore t :which-key "treemacs")
    "dd" '(treemacs :which-key "treemacs")
 
-
    ;; file
    "f"   '(:ignore t :which-key "files")
    "ff"  '(helm-find-files :which-key "find files")
@@ -279,6 +283,12 @@
   (add-hook 'ielm-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode))
+
+(use-package lispyville
+  :init
+  (general-add-hook '(emacs-lisp-mode-hook clojure-mode-hook lisp-mode-hook) #'lispyville-mode)
+  :config
+  (lispyville-set-key-theme '(operators c-w additional)))
 
 (use-package flycheck
   :defer t
@@ -423,7 +433,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
