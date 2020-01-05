@@ -377,7 +377,6 @@
    "gU"  '(magit-unstage-file :which-key "magit-unstage-file")
    "gp"  '(magit-pull :which-key "magit-pull")
    "gP"  '(magit-push :which-key "magit-push")
-   "gt"  '(magit-stash :which-key "magit-stash")
    "gm"  '(magit-merge :which-key "magit-merge")
 
    ;; jump to definition
