@@ -45,6 +45,7 @@
 
 ;; Highlight the whole expression when cursor is on the bracket
 (setq show-paren-style 'expression)
+
 ;; font
 (add-to-list 'default-frame-alist '(font . "Victor Mono-13"))
 
@@ -209,7 +210,8 @@
    ;; Git
    "g"   '(:ignore t :which-key "git")
    "gb"  '(magit-branch :which-key "magit-branch")
-   "gc"  '(magit-clone :whcih-key "magit-clone")
+   "gc"  '(magit-clone :which-key "magit-clone")
+   "gd"  '(magit-stash :which-key "magit-stash")
    "gs"  '(magit-status :which-key "magit-status")
    "gi"  '(magit-init :which-key "magit-init")
    "gS"  '(magit-stage-file :which-key "magit-stage-file")
