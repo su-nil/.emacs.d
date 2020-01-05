@@ -43,7 +43,7 @@
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
-;; Highlight the whole expression when cursor is on the bracket
+;; highlight the whole expression when cursor is on the bracket
 (setq show-paren-style 'expression)
 
 ;; font
@@ -59,8 +59,8 @@
 (setq frame-title-format nil)
 
 ;; unset keys
-;; (global-unset-key (kbd "q"))
 (global-set-key (kbd "C-;") 'comment-line)
+
 ;; make things easy
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode t)
@@ -180,7 +180,7 @@
    "TAB" '(ace-window :which-key "ace-window")
    "'"   '(eshell :which-key "terminal")
 
-   ;; Buffer
+   ;; buffer
    "b"   '(:ignore t :which-key "buffers")
    "bp"  '(previous-buffer :which-key "previous-buffer")
    "bn"  '(next-buffer :which-key "next-buffer")
@@ -191,23 +191,24 @@
    "bq"  '(read-only-mode :which-key "read-only-mode")
    "bs"  '(save-buffer :which-key "save-buffer")
 
+   ;; treemacs
    "d" '(:ignore t :which-key "treemacs")
    "dd" '(treemacs :which-key "treemacs")
 
 
-   ;; File
+   ;; file
    "f"   '(:ignore t :which-key "files")
    "ff"  '(helm-find-files :which-key "find files")
    "fw"  '(evil-write :which-key "evil-write")
    "fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
    "fo"  '(find-file-other-window :which-key "find-file-other-window")
 
-   ;; Frame
+   ;; frame
    "F"    '(:ignore t :which-key "frame")
    "Ff"   '(make-frame :which-key "make-frame")
    "Fd"   '(delete-frame :which-key "delete-frame")
 
-   ;; Git
+   ;; git
    "g"   '(:ignore t :which-key "git")
    "gb"  '(magit-branch :which-key "magit-branch")
    "gc"  '(magit-clone :which-key "magit-clone")
@@ -221,13 +222,13 @@
    "gt"  '(magit-stash :which-key "magit-stash")
    "gm"  '(magit-merge :which-key "magit-merge")
 
-   ;; Jump to definition
+   ;; jump to definition
    "j"   '(:ignore t :which-key "dumb-jump")
    "jj"  '(dumb-jump-go :which-key "dumb-jump-go")
    "jp"  '(dumb-jump-back :which-key "dumb-jump-back")
    "jo"  '(dumb-jump-go-other-window :which-key "dumb-jump-go-other-window")
 
-   ;; Quit
+   ;; quit
    "k"   '(:ignore t :which-key "quit")
    "kk"  '(kill-emacs :which-key "kill-emacs")
 
@@ -242,16 +243,16 @@
    "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
    "pg"  '(helm-projectile-grep :which-key "helm-projectile-grep")
 
-   ;; Search
+   ;; search
    "s"   '(:ignore t :which-key "search")
    "ss"  '(helm-swoop-without-pre-input :which-key "helm-swoop-without-pre-input")
    "si"  '(helm-swoop :which-key "helm-swoop")
 
-   ;; Toggle
+   ;; toggle
    "t"   '(:ignore t :which-key "toggle")
    "tr"  '(rainbow-delimiters-mode :which-key "rainbow-delimiter-mode")
 
-   ;; Window
+   ;; window
    "w"   '(:ignore t :which-key "windows")
    "wl"  '(evil-window-right :which-key "evil-window-right")
    "wh"  '(evil-window-left :which-key "evil-window-left")
@@ -262,7 +263,7 @@
    "wd"  '(delete-window :which-key "delete-window")
    "wo"  '(delete-other-windows :which-key "delete-other-windows")
 
-   ;; Zoom
+   ;; zoom
    "z"  '(:ignore t :which-key "zoom")
    "z=" '(text-scale-increase :which-key "text-scale-increase")
    "z-" '(text-scale-decrease :which-key "text-scale-decrease")))
@@ -357,16 +358,12 @@
 (use-package doom-themes
   :ensure t
   :config
-  ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-snazzy t)
-  ;; (doom-themes-visual-bell-config)
   (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
 (use-package ace-window
@@ -438,12 +435,6 @@
 ;; Your init file should contain only one such instance.
 ;; If there is more than one, they won't work right.
 
-
-;; (use-package monokai-theme
-;;  :ensure t
-;;  :init
-;;  :config
-;;  (load-theme 'monokai t))
 
 ;; Parinfer ;;
 ;; (use-package parinfer
