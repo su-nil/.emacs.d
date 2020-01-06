@@ -22,22 +22,22 @@
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-(show-paren-mode 1)
 
 ;; toggle on
 (display-time-mode 1)
 (global-hl-line-mode +1)
 (column-number-mode t)
 (size-indication-mode t)
+(show-paren-mode 1)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
 ;; (add-hook 'after-init-hook 'org-agenda-list)
-(setq initial-buffer-choice
-      (lambda ()
-	(org-agenda-list 1)
-	(delete-other-windows)
-	(get-buffer "*Org Agenda*")))
+;; (setq initial-buffer-choice
+;;       (lambda ()
+;;	(org-agenda-list 1)
+;;	(delete-other-windows)
+;;	(get-buffer "*Org Agenda*")))
 
 ;; disable emacs error sounds instead enable visible bell
 (setq ring-bell-function 'ignore)
@@ -110,16 +110,19 @@
 
 (use-package use-package-chords
   :ensure t
+  :defer t
   :config
   (key-chord-mode 1))
 
 (use-package evil
   :ensure t
+  :defer t
   :config
   (evil-mode 1))
 
 (use-package evil-escape
   :ensure t
+  :defer 1
   :init
   (setq-default evil-escape-key-sequence "df"
 		evil-escape-unordered-key-sequence "true")
@@ -127,7 +130,8 @@
   (evil-escape-mode 1))
 
 (use-package expand-region
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package helm
   :ensure t
@@ -153,7 +157,8 @@
   (helm-mode 1))
 
 (use-package helm-ag
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package helm-swoop
   :ensure t
@@ -200,10 +205,12 @@
   :diminish flycheck-mode)
 
 (use-package flycheck-clj-kondo
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package clj-refactor
   :ensure t
+  :defer t
   :config
   (add-hook 'clojure-mode-hook #'clj-refactor-mode))
 
@@ -233,17 +240,18 @@
 
 (use-package aggressive-indent
   :ensure t
+  :defer t
   :config
   (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 
 (use-package rainbow-delimiters
   :ensure t
-  :defer 2
+  :defer t
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package company
-  :defer 2
+  :defer t
   :ensure t
   :diminish company-mode
   :hook
@@ -286,7 +294,7 @@
 
 (use-package dumb-jump
   :ensure t
-  :defer 5
+  :defer t
   :init
   (dumb-jump-mode 1)
   :config
@@ -448,7 +456,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
