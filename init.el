@@ -187,6 +187,8 @@
   (general-add-hook my-lisp-mode-hooks #'paredit-mode))
 
 (use-package lispyville
+  :defer t
+  :ensure t
   :init
   (general-add-hook my-lisp-mode-hooks #'lispyville-mode)
   :config
