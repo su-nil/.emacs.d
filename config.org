@@ -4,7 +4,7 @@
 	user-mail-address "kslvsunil@gmail.com")
 #+END_SRC
 
-* Garbage collection threshold and large file warning
+# * Garbage collection threshold and large file warning
 #+BEGIN_SRC emacs-lisp
 (setq gc-cons-threshold 50000000)
 (setq large-file-warning-threshold 100000000)
@@ -39,21 +39,23 @@
 #+END_SRC
 * Package setup
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(setq package-archives
-      '(("org" . "http://orgmode.org/elpa/")
-	("gnu" . "http://elpa.gnu.org/packages/")
-	("melpa" . "https://melpa.org/packages/")
-	("melpa-stable" . "http://stable.melpa.org/packages/")))
-(package-initialize)
-(setq package-enable-at-startup nil)
+					  ; (require 'package)
 
-;; bootstrap use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+  ;; (setq package-archives
+  ;;       '(("org" . "http://orgmode.org/elpa/")
+  ;;	("gnu" . "http://elpa.gnu.org/packages/")
+  ;;	("melpa" . "https://melpa.org/packages/")
+  ;;	("melpa-stable" . "http://stable.melpa.org/packages/")))
 
-(require 'use-package)
+  ;; (package-initialize)
+  ;; (setq package-enable-at-startup nil)
+
+  ;; ;; bootstrap use-package
+  ;; (unless (package-installed-p 'use-package)
+  ;;   (package-refresh-contents)
+  ;;   (package-install 'use-package))
+
+  ;; (require 'use-package)
 #+END_SRC
 
 * UI Tweaks
@@ -529,4 +531,19 @@
   :ensure t
   :mode
   (("\\.yml\\'" . yaml-mode)))
+#+END_SRC
+* Byte compile after save
+#+BEGIN_SRC emacs-lisp
+(defun my/tangle-dotfiles ()
+   "If the current file is this file, the code blocks are tangled"
+   (when (equal (buffer-file-name) (expand-file-name "~/.emacs.d/config.org"))
+     (org-babel-tangle nil "~/.emacs.d/config.el")
+     (byte-compile-file "~/.emacs.d/config.el")))
+
+(add-hook 'after-save-hook #'my/tangle-dotfiles)
+#+END_SRC
+* Auto compile
+#+BEGIN_SRC emacs-lisp
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
 #+END_SRC

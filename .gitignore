@@ -12,3 +12,4 @@
 *.cache
 /.projectile
 /config.el
+*.elc
