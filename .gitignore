@@ -1,5 +1,5 @@
 *~
-
+*backup
 /auto-save-list/
 /elpa/
 /smex-items
@@ -11,3 +11,4 @@
 /projectile-bookmarks.eld
 *.cache
 /.projectile
+/config.el
