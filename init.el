@@ -26,6 +26,7 @@
 (column-number-mode t)
 (size-indication-mode t)
 (show-paren-mode 1)
+(global-auto-revert-mode 1)
 
 ;; disable startup screen
 (setq inhibit-startup-screen t)
@@ -97,6 +98,12 @@
 ;; install and config packages
 (use-package diminish
   :ensure t)
+
+(use-package auto-compile
+  :ensure t
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
 
 (use-package use-package-chords
   :ensure t
@@ -190,17 +197,17 @@
   (lispyville-set-key-theme '(operators c-w additional)))
 
 (use-package flycheck
-  :defer t
+  :defer 2
   :ensure t
   :diminish flycheck-mode)
 
 (use-package flycheck-clj-kondo
   :ensure t
-  :defer t)
+  :defer 2)
 
 (use-package clj-refactor
   :ensure t
-  :defer t
+  :defer 2
   :config
   (add-hook 'clojure-mode-hook 'clj-refactor-mode))
 
@@ -230,7 +237,7 @@
 
 (use-package aggressive-indent
   :ensure t
-  :defer t
+  :defer 2
   :config
   (add-hook 'prog-mode-hook 'aggressive-indent-mode))
 
@@ -290,15 +297,6 @@
   (dumb-jump-mode 1)
   :config
   (setq dumb-jump-selector 'helm))
-
-(use-package golden-ratio
-  :ensure t
-  :defer t
-  :init
-  (golden-ratio-mode 1)
-  :config
-  (add-to-list 'golden-ratio-extra-commands 'ace-window)
-  (setq golden-ratio-recenter t))
 
 (use-package org
   :ensure t
@@ -379,6 +377,7 @@
    "gp"  '(magit-pull :which-key "magit-pull")
    "gP"  '(magit-push :which-key "magit-push")
    "gm"  '(magit-merge :which-key "magit-merge")
+   "gl"  '(magit-blame :which-key "magit-blame")
 
    ;; jump to definition
    "j"   '(:ignore t :which-key "dumb-jump")
@@ -395,11 +394,11 @@
 
    ;; projects
    "p"   '(:ignore t :which-key "projects")
-   "pf"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
+   "pp"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
    "pp"  '(helm-projectile :which-key "helm-projectile")
    "ps"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
    "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
-   "pg"  '(helm-projectile-grep :which-key "helm-projectile-grep")
+   "pf"  '(helm-projectile-grep :which-key "helm-projectile-grep")
 
    ;; search
    "s"   '(:ignore t :which-key "search")
@@ -434,7 +433,14 @@
    "S-M-<up>"   'lispy-move-up
    "S-M-<down>" 'lispy-move-down
    "C--"        'er/contract-region
-   "C-="        'er/expand-region))
+   "C-="        'er/expand-region)
+
+  ;; cider specific
+  (general-define-key
+   :states '(normal visual)
+   :keymaps '(clojure-mode-map)
+   "M-N" 'cider-repl-set-ns
+   "M-." 'cider-find-var))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -447,7 +453,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo golden-ratio expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
