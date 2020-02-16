@@ -440,7 +440,7 @@
    :states '(normal visual)
    :keymaps '(clojure-mode-map)
    "M-N" 'cider-repl-set-ns
-   "M-." 'cider-find-var))
+   "M-." 'cider-find-dwim))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
