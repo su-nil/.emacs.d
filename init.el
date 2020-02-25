@@ -222,7 +222,7 @@
 
 (use-package cider
   :ensure t
-  :defer t
+  :defer 2
   :init (add-hook 'cider-mode-hook 'clj-refactor-mode)
   :diminish subword-mode
   :config
@@ -232,8 +232,8 @@
 	cider-prompt-save-file-on-load 'always-save
 	cider-font-lock-dynamically '(macro core function var)
 	nrepl-hide-special-buffers t
-	cider-overlays-use-font-lock t)
-  (cider-repl-toggle-pretty-printing))
+	cider-overlays-use-font-lock t
+	cider-repl-use-pretty-print t))
 
 (use-package aggressive-indent
   :ensure t
@@ -395,7 +395,7 @@
    ;; projects
    "p"   '(:ignore t :which-key "projects")
    "pp"  '(helm-projectile-find-file :which-key "helm-projectile-find-file")
-   "pp"  '(helm-projectile :which-key "helm-projectile")
+   "pP"  '(helm-projectile :which-key "helm-projectile")
    "ps"  '(helm-projectile-switch-project :which-key "helm-projectile-switch-project")
    "pd"  '(helm-projectile-find-dir :which-key "helm-projectile-find-dir")
    "pf"  '(helm-projectile-grep :which-key "helm-projectile-grep")
@@ -415,8 +415,8 @@
    "wh"  '(evil-window-left :which-key "evil-window-left")
    "wk"  '(evil-window-up :which-key "evil-window-up")
    "wj"  '(evil-window-down :which-key "evil-window-down")
-   "w/"  '(split-window-right :which-key "split-window-right")
-   "w-"  '(split-window-below :which-key "split-window-below")
+   "w/"  '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "split-window-right")
+   "w-"  '((lambda () (interactive) (split-window-vertically) (other-window 1)) :which-key "split-window-below")
    "wd"  '(delete-window :which-key "delete-window")
    "wo"  '(delete-other-windows :which-key "delete-other-windows")
 
@@ -433,7 +433,10 @@
    "S-M-<up>"   'lispy-move-up
    "S-M-<down>" 'lispy-move-down
    "C--"        'er/contract-region
-   "C-="        'er/expand-region)
+   "C-="        'er/expand-region
+   "s-("        'lispy-wrap-round
+   "s-["        'lispy-wrap-brackets
+   "s-{"        'lispy-wrap-braces)
 
   ;; cider specific
   (general-define-key
@@ -453,7 +456,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired helm-cider magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (cider auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
