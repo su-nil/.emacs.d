@@ -348,22 +348,24 @@
    "bN"  '(evil-buffer-new :which-key "evil-buffer-new")
    "bq"  '(read-only-mode :which-key "read-only-mode")
    "bs"  '(save-buffer :which-key "save-buffer")
+   "br"  '(revert-buffer :which-key "revert-buffer")
 
    ;; treemacs
    "d" '(:ignore t :which-key "treemacs")
    "dd" '(treemacs :which-key "treemacs")
 
    ;; file
-   "f"   '(:ignore t :which-key "files")
-   "ff"  '(helm-find-files :which-key "find files")
-   "fw"  '(evil-write :which-key "evil-write")
-   "fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
-   "fo"  '(find-file-other-window :which-key "find-file-other-window")
+   "F"   '(:ignore t :which-key "files")
+   "Ff"  '(helm-find-files :which-key "find files")
+   "Fi"  '((lambda () (interactive) (find-file user-init-file)) :which-key "edit init file")
+   "Fo"  '(find-file-other-window :which-key "find-file-other-window")
 
    ;; frame
-   "F"    '(:ignore t :which-key "frame")
-   "Ff"   '(make-frame :which-key "make-frame")
-   "Fd"   '(delete-frame :which-key "delete-frame")
+   "f"    '(:ignore t :which-key "frame")
+   "ff"   '(make-frame :which-key "make-frame")
+   "fd"   '(delete-frame :which-key "delete-frame")
+   "fo"   '(other-frame :which-key "other-frame")
+
 
    ;; git
    "g"   '(:ignore t :which-key "git")
@@ -418,7 +420,8 @@
    "w/"  '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "split-window-right")
    "w-"  '((lambda () (interactive) (split-window-vertically) (other-window 1)) :which-key "split-window-below")
    "wd"  '(delete-window :which-key "delete-window")
-   "wo"  '(delete-other-windows :which-key "delete-other-windows")
+   "wo"  '(other-window :which-key "other-window")
+   "wt"  '(delete-other-windows :which-key "delete-other-windows")
 
    ;; zoom
    "z"   '(:ignore t :which-key "zoom")
