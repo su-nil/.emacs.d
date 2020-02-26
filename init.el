@@ -324,7 +324,13 @@
 
 (use-package git-timemachine
   :defer t
-  :ensure t)
+  :ensure t
+  :config
+  (eval-after-load 'git-timemachine
+    '(progn
+       (evil-make-overriding-map git-timemachine-mode-map 'normal)
+       ;; force update evil keymaps after git-timemachine-mode loaded
+       (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))))
 
 ;; custom keybindings
 (use-package general
@@ -384,7 +390,7 @@
    "gP"  '(magit-push :which-key "magit-push")
    "gm"  '(magit-merge :which-key "magit-merge")
    "gl"  '(magit-blame :which-key "magit-blame")
-   "gt"  '(:ignore t :which-key "git-timemachine")
+   "gt"  '(git-timemachine :which-key "git-timemachine")
 
    ;; jump to definition
    "j"   '(:ignore t :which-key "dumb-jump")
@@ -453,11 +459,7 @@
    "M-N" 'cider-repl-set-ns
    "M-." 'cider-find-dwim))
 
-(eval-after-load 'git-timemachine
-  '(progn
-     (evil-make-overriding-map git-timemachine-mode-map 'normal)
-     ;; force update evil keymaps after git-timemachine-mode loaded
-     (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
