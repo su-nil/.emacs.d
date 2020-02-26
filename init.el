@@ -322,6 +322,10 @@
   :defer t
   :ensure t)
 
+(use-package git-timemachine
+  :defer t
+  :ensure t)
+
 ;; custom keybindings
 (use-package general
   :ensure t
@@ -363,7 +367,7 @@
    ;; frame
    "f"    '(:ignore t :which-key "frame")
    "ff"   '(make-frame :which-key "make-frame")
-   "fd"   '(delete-frame :which-key "delete-frame")
+   "fk"   '(delete-frame :which-key "delete-frame")
    "fo"   '(other-frame :which-key "other-frame")
 
 
@@ -380,6 +384,7 @@
    "gP"  '(magit-push :which-key "magit-push")
    "gm"  '(magit-merge :which-key "magit-merge")
    "gl"  '(magit-blame :which-key "magit-blame")
+   "gt"  '(:ignore t :which-key "git-timemachine")
 
    ;; jump to definition
    "j"   '(:ignore t :which-key "dumb-jump")
@@ -448,6 +453,12 @@
    "M-N" 'cider-repl-set-ns
    "M-." 'cider-find-dwim))
 
+(eval-after-load 'git-timemachine
+  '(progn
+     (evil-make-overriding-map git-timemachine-mode-map 'normal)
+     ;; force update evil keymaps after git-timemachine-mode loaded
+     (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -459,7 +470,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (cider auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (git-timemachine cider auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
