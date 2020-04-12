@@ -121,7 +121,7 @@
   :ensure t
   :defer 1
   :init
-  (setq-default evil-escape-key-sequence "df"
+  (setq-default evil-escape-key-sequence "st"
 		evil-escape-unordered-key-sequence "true")
   :config
   (evil-escape-mode 1))
@@ -457,7 +457,14 @@
    :states '(normal visual)
    :keymaps '(clojure-mode-map)
    "M-N" 'cider-repl-set-ns
-   "M-." 'cider-find-dwim))
+   "M-." 'cider-find-dwim)
+
+  (general-define-key
+   :states '(insert)
+   "C-k" 'paredit-kill
+   "C-a" 'move-beginning-of-line
+   "C-e" 'move-end-of-line
+   "C-d" 'delete-forward-char))
 
 
 
