@@ -121,10 +121,10 @@
   :ensure t
   :defer 1
   :init
-  (setq-default evil-escape-key-sequence "df"
-		evil-escape-unordered-key-sequence "true")
+  (setq-default evil-escape-key-sequence "tn")
   :config
   (evil-escape-mode 1))
+;; evil-escape-unordered-key-sequence "true"
 
 (use-package expand-region
   :ensure t
@@ -400,7 +400,7 @@
 
    ;; quit
    "k"   '(:ignore t :which-key "quit")
-   "kk"  '(kill-emacs :which-key "kill-emacs")
+   "kq"  '(kill-emacs :which-key "kill-emacs")
 
    ;; org mode
    "o"  '(:ignore t :which-key "org")
@@ -457,7 +457,23 @@
    :states '(normal visual)
    :keymaps '(clojure-mode-map)
    "M-N" 'cider-repl-set-ns
-   "M-." 'cider-find-dwim))
+   "M-." 'cider-find-dwim)
+
+  (general-define-key
+   :states '(normal insert emacs)
+   "C-k" 'paredit-kill
+   "C-a" 'move-beginning-of-line
+   "C-e" 'move-end-of-line
+   "C-d" 'delete-forward-char
+   "C-n" 'next-line
+   "C-p" 'previous-line
+   "s-s" 'save-buffer
+   "M-<" 'beginning-of-buffer
+   "M->" 'end-of-buffer
+   "C-f" 'forward-char
+   "C-b" 'backward-char
+   "C-M-f" 'paredit-forward
+   "C-M-b" 'paredit-backward))
 
 
 
@@ -472,7 +488,7 @@
  '(golden-ratio-mode t)
  '(package-selected-packages
    (quote
-    (git-timemachine cider auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
+    (mustache-mode git-timemachine cider auto-compile esup lispyville evil-commentary treemacs-projectile treemacs-evil treemacs yaml-mode move-text zoom dumb-jump helm-ag helm-projectile clj-refactor all-the-icons-dired magit flycheck-clj-kondo expand-region doom-themes helm-swoop general which-key helm monokai-theme monokai evil-escape evil use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
