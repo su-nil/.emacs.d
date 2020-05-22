@@ -121,10 +121,10 @@
   :ensure t
   :defer 1
   :init
-  (setq-default evil-escape-key-sequence "tn")
+  (setq-default evil-escape-key-sequence "wf"
+		evil-escape-unordered-key-sequence "true")
   :config
   (evil-escape-mode 1))
-;; evil-escape-unordered-key-sequence "true"
 
 (use-package expand-region
   :ensure t
